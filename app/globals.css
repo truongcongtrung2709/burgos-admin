@@ -2,26 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Nunito+Sans:opsz,wght@6..12,200;6..12,300;6..12,400;6..12,500;6..12,600;6..12,700;6..12,800;6..12,900;6..12,1000&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-color: radial-gradient(
+    100% 100% at 50% 0%,
+    #0c4c7b 0%,
+    #1e2f40 100%
+  );
+  --text-color: #443737;
+  --white-color: #fff;
+  --gray-color: #dedede;
+  --dark-gray-color: #979797;
+  --button-color: #1e2f40;
+  --yellow-color: #fbb731;
+  --orange-color: #f37335;
+  --black-navy-color: #1b2a49;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  position: relative;
+
+  font-family: "Nunito Sans", sans-serif;
 }
