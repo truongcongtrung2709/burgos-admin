@@ -1,15 +1,13 @@
-import useSWR from 'swr'
 import {deleteOrder } from '@/services/ordersAPI'
 import { Order } from '@/types/order'
-import React from 'react'
-import EditOrderModal from '@/components/modal'
-import Modal from '@/components/modal'
+import React,{useState} from 'react'
+import EditOrderModal from '@/components/editOrderModal'
 type Prop = {
   order:Order
   index:number
 }
 const OrderItem = ({order,index} : Prop) => {
-  
+  const [isToggleEdit, setIsToggleEdit] = useState(false)
   function handleDelete(id:number) {
     if(confirm("Are you sure you want to delete?")){
     deleteOrder(id);
@@ -21,7 +19,7 @@ const OrderItem = ({order,index} : Prop) => {
     <>
         <tbody>
             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" className=" p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <th scope="row" className=" p-4 font-medium text-gray-900 ">
                     {index}
                 </th>
                 <td className=" p-4">
@@ -47,8 +45,10 @@ const OrderItem = ({order,index} : Prop) => {
                 </td>
                
                 <td className=" p-4">
-                    <button  className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
-                    <Modal/>
+                    <button 
+                    onClick={()=>setIsToggleEdit(!isToggleEdit)}
+                    className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                    <EditOrderModal isToggleEdit={isToggleEdit} setIsToggleEdit={setIsToggleEdit} order={order}/>
                 </td>
                 <td className=" p-4">
                 <button onClick={()=>handleDelete(order?.id)} className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
