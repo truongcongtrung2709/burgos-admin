@@ -20,7 +20,7 @@ const config: Config = {
       "border-footer": "#3e4e5e",
       black: "#000",
       red: "#ff0000",
-      "black-overlay": "rgba(0,0,0,0.69)",
+      "black-overlay": "rgba(0,0,0,0.2)",
     },
     extend: {
       
