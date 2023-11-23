@@ -11,7 +11,8 @@ export default function AddBlogView ()  {
   const {register,
     handleSubmit,
     formState:{errors},
-    setValue
+    setValue,
+    reset
     }= useForm<Blog>();
     const [imgPreview, setImgPreview] = useState("")
     const handleChangeImage = (evt:any) =>{
@@ -32,6 +33,7 @@ export default function AddBlogView ()  {
         console.log(data);
         addBlog(data);
         alert("Add successfully");
+        reset(data);
       } catch (error) {
         console.log(error);
       }    

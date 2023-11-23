@@ -28,7 +28,7 @@ export function SideMenu () {
             <h1 className="item-title uppercase">Products</h1>
           </div>
           <div className="item-body">
-            <Link className="hover:text-yellow" href="/add-products">
+            <Link className="hover:text-yellow" href="/add-product">
               <h2 className="menu-item">Add a Product </h2>
             </Link>
             <Link className="hover:text-yellow" href="/product-list">

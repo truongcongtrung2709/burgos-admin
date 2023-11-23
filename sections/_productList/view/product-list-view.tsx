@@ -1,41 +1,40 @@
 'use client'
-import { blogsTableTitle } from '@/_mock/_label-input/_blogsTableTitle'
-import { blogsURLEndpoint, getBlogs } from '@/services/blogsAPI'
-import { Blog } from '@/types/blog'
+import { productTableTitles } from '@/_mock/_productTableTitles'
+import { getProducts, productsURLEndpoint } from '@/services/productsAPI'
+import { Product } from '@/types/product'
 import React from 'react'
 import useSWR from 'swr'
-import BlogItem from '../blog-item'
+import ProductItem from '../product-item'
 
-
-export default function BlogListView ()  {
-  const{data:blogs,isLoading, error} = useSWR(blogsURLEndpoint,getBlogs)
+export default function ProductListView ()  {
+  const{data:products,isLoading, error} = useSWR(productsURLEndpoint,getProducts)
   
   return (
     <>
     <div className="container max-w-screen-xl mx-auto p-4">
       <div className="options-bar border-b-2 border-b-gray pb-2 flex justify-between">
-        <span>All Blogs</span>
+        <span>All Products</span>
         <div className="filter">
         <select name="filter" id="">
           <option value="0">Filter</option>
-          <option value="date">title</option>
-          <option value="complete">author</option>
-          <option value="pending">category</option>
+          <option value="name">name</option>
+          <option value="price">price</option>
+          <option value="category">category</option>
         
         </select>
         </div>
       </div>
-    {blogs?.length === 0 && (
-      <div className="no-blogs text-center ">
-      <h1 className='p-4'>There is no Blogs</h1>
+    {products?.length === 0 && (
+      <div className="no-products text-center ">
+      <h1 className='p-4'>There is no products</h1>
     </div>
     )}
-    {blogs?.length !== 0 && (
+    {products?.length !== 0 && (
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                {blogsTableTitle.map((title,index) => (
+                {productTableTitles.map((title,index) => (
                   <th key={index} scope="col" className=" py-3">
                     {title}
                   </th>
@@ -48,8 +47,8 @@ export default function BlogListView ()  {
                   </th>
               </tr>
           </thead>
-      {blogs?.map((blog:Blog,index:number) => (
-        <BlogItem key={index} blog={blog} index={index+1} />
+      {products?.map((product:Product,index:number) => (
+        <ProductItem key={index} product={product} index={index+1} />
       ))}
           </table>
         </div>

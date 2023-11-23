@@ -1,19 +1,19 @@
 import React,{useState} from 'react'
-import { Blog } from '@/types/blog'
-import EditBlogModal from '@/components/editBlogModal'
-import { blogsURLEndpoint, deleteBlog } from '@/services/blogsAPI'
 import {mutate} from "swr"
+import { Product } from '@/types/product'
+import { deleteProduct, productsURLEndpoint } from '@/services/productsAPI'
+import EditProductModal from '@/components/editProductModal'
 type Prop = {
-  blog:Blog
+  product:Product
   index:number
 }
-const BlogItem = ({blog,index} : Prop) => {
+const ProductItem = ({product,index} : Prop) => {
   const [isToggleEdit, setIsToggleEdit] = useState(false)
   
   function handleDelete(id:number) {
     if(confirm("Are you sure you want to delete?")){
-        deleteBlog(id)
-        mutate(blogsURLEndpoint);
+        deleteProduct(id)
+        mutate(productsURLEndpoint);
     }else{
       return null;
     }
@@ -26,29 +26,29 @@ const BlogItem = ({blog,index} : Prop) => {
                     {index}
                 </th>
                 <td className=" p-4">
-                    {blog?.dateTime}
+                    {product?.name}
                 </td>
                 <td className=" p-4">
-                    {blog?.title}
+                    ${product?.price}
                 </td>
                 <td className=" p-4">
-                    {blog?.author}
+                    {product?.weight}g
                 </td>
                 <td className=" p-4">
-                    {blog?.category}
+                    {product?.ingredients}
                 </td>
                 <td className=" p-4">
-                    {blog?.img}
+                    {product?.oldPrice}
                 </td>         
                
                 <td className=" p-4">
                     <button 
                     onClick={()=>setIsToggleEdit(!isToggleEdit)}
                     className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
-                    <EditBlogModal isToggleEdit={isToggleEdit} setIsToggleEdit={setIsToggleEdit} blog={blog}/>
+                    <EditProductModal isToggleEdit={isToggleEdit} setIsToggleEdit={setIsToggleEdit} product={product}/>
                 </td>
                 <td className=" p-4">
-                <button onClick={()=>handleDelete(blog?.id)} className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
+                <button onClick={()=>handleDelete(product?.id)} className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
                 </td>
             </tr>
         </tbody>
@@ -56,4 +56,4 @@ const BlogItem = ({blog,index} : Prop) => {
   )
 }
 
-export default BlogItem
+export default ProductItem
