@@ -1,14 +1,12 @@
 'use client'
-import MainLayout from '@/layouts/mainLayout'
 import React from 'react'
-import useSWR,{preload} from 'swr'
-import {getOrders, ordersURLEndpoint as cacheKey, ordersURLEndpoint } from '@/services/ordersAPI'
+import useSWR from 'swr'
+import {getOrders, ordersURLEndpoint } from '@/services/ordersAPI'
 import { Order } from '@/types/order'
 import OrderItem from '../order-item'
 import { ordersTableTitle } from '@/_mock/_OrdersTableTitle'
-preload(ordersURLEndpoint,getOrders)
 export default function HomeView ()  {
-  const{data:orders,isLoading, error} = useSWR(ordersURLEndpoint,getOrders,{refreshInterval:500})
+  const{data:orders,isLoading, error} = useSWR(ordersURLEndpoint,getOrders)
   return (
     <>
     <div className="container max-w-screen-xl mx-auto p-4">

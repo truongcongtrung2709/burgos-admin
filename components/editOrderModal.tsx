@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react'
+import React, { useEffect} from 'react'
 import { getProducts, productsURLEndpoint as productsCacheKey } from '@/services/productsAPI';
-import useSWR from "swr"
+import {mutate} from "swr"
 import { Product } from '@/types/product';
 import { Order } from '@/types/order';
 import { useForm } from 'react-hook-form';
+import { ordersURLEndpoint, updateOrder } from '@/services/ordersAPI';
 
 type Props = {
   order:Order
@@ -12,12 +13,29 @@ type Props = {
 }
 
 const EditOrderModal = ({order,isToggleEdit,setIsToggleEdit} : Props) => {
-
   const {register,
-        handleSubmit,
-        formState:{errors}}= useForm<Order>();
-  function onSubmit(data:Order) {
+    handleSubmit,
+    formState:{errors},
+    setValue,
+    reset}= useForm<Order>();
+  useEffect(() => {
+    if(order) {
+      reset(order);
+    }
+  },[order, reset])
 
+  function onSubmit(data:Order) {
+    const orderDuration = order.duration;
+    setValue("duration", orderDuration)
+    if(confirm("Are you sure")){
+      console.log(data);
+      updateOrder(data);
+      setIsToggleEdit(false);
+      mutate(ordersURLEndpoint)
+    }else{
+      return null
+    }
+    
   }
   const handleWrapperClose = (e:any) => {
     if(e.target.id === 'wrapper') {
@@ -122,23 +140,33 @@ const EditOrderModal = ({order,isToggleEdit,setIsToggleEdit} : Props) => {
          
           <div>
             <label htmlFor="subTotal" className="block mb-2 text-sm font-medium">Sub Total</label>
-              <input type="text" id="subTotal" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 " placeholder="Your subTotal" {...register("subTotal",{required:{value:true,message:"this is required"}})}  />
+              <input readOnly type="text" id="subTotal" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 " placeholder="Your subTotal" {...register("subTotal",{required:{value:true,message:"this is required"}})}  />
               {errors?.subTotal && <p className="text-red">{errors.subTotal.message}</p>}
           </div>
           <div>
             <label htmlFor="total" className="block mb-2 text-sm font-medium">Total</label>
-              <input type="text" id="total" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 " placeholder="Your Total"  
+              <input readOnly type="text" id="total" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 " placeholder="Your Total"  
               {...register("total",{required:{value:true,message:"this is required"}})}/>
               {errors?.total && <p className="text-red">{errors.total.message}</p>}
           </div>
           <div>
             <label htmlFor="duration" className="block mb-2 text-sm font-medium">Duration</label>
-              <input type="radio" id="duration" className='mx-1'  {...register("duration",{required:{value:true,message:"this is required"}})} />
+
+              <input type="radio" id="duration" className='mx-1' value="pending"  {...register("duration",{required:{value:true,message:"this is required"}})} 
+              />
               <label htmlFor="">Pending</label>
-              <input type="radio" id="duration"  className='mx-1' {...register("duration",{required:{value:true,message:"this is required"}})} />
+
+              
+              <input type="radio" id="duration"  className='mx-1' {...register("duration",{required:{value:true,message:"this is required"}})} 
+              value="delivering"
+              />
               <label htmlFor="">Delivering</label>
-              <input type="radio" id="duration" {...register("duration",{required:{value:true,message:"this is required"}})} className='mx-1'  />
+
+
+              <input type="radio" id="duration" {...register("duration",{required:{value:true,message:"this is required"}})} value="completed" className='mx-1'  
+              />
               <label htmlFor="">Completed</label>
+
               {errors?.duration && <p className="text-red">{errors.duration.message}</p>}
           </div>
         </form>

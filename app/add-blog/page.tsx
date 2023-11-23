@@ -1,3 +1,4 @@
+import AddBlogView from "@/sections/_addBlog/view/AddBlogView";
 
 
 export const metadata = {
