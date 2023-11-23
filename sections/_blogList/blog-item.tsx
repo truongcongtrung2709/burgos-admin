@@ -1,16 +1,20 @@
-import {deleteOrder } from '@/services/ordersAPI'
 import React,{useState} from 'react'
-import EditOrderModal from '@/components/editOrderModal'
-import { Order } from '@/types/order'
+import { Blog } from '@/types/blog'
+import EditBlogModal from '@/components/editBlogModal'
+import { blogsURLEndpoint, deleteBlog } from '@/services/blogsAPI'
+import {mutate} from "swr"
 type Prop = {
-  order:Order
+  blog:Blog
   index:number
 }
-const OrderItem = ({order,index} : Prop) => {
+const BlogItem = ({blog,index} : Prop) => {
   const [isToggleEdit, setIsToggleEdit] = useState(false)
+  console.log(blog);
+  
   function handleDelete(id:number) {
     if(confirm("Are you sure you want to delete?")){
-    deleteOrder(id);
+        deleteBlog(id)
+        mutate(blogsURLEndpoint);
     }else{
       return null;
     }
@@ -23,35 +27,29 @@ const OrderItem = ({order,index} : Prop) => {
                     {index}
                 </th>
                 <td className=" p-4">
-                    {order?.dateTime}
+                    {blog?.dateTime}
                 </td>
                 <td className=" p-4">
-                    {order?.firstName}
+                    {blog?.title}
                 </td>
                 <td className=" p-4">
-                    {order?.address}
+                    {blog?.author}
                 </td>
                 <td className=" p-4">
-                    {order?.phone}
+                    {blog?.category}
                 </td>
                 <td className=" p-4">
-                    {order?.total}$
-                </td>
-                <td className={`p-4 
-                ${order?.duration === "pending"? "bg-yellow text-text-color": 
-                order?.duration === "delivering"? "bg-dark-gray text-text-color" : 
-                order?.duration === "complete" ? "bg-black-navy text-white": ""}`}>
-                    {order?.duration}
-                </td>
+                    {blog?.img}
+                </td>         
                
                 <td className=" p-4">
                     <button 
                     onClick={()=>setIsToggleEdit(!isToggleEdit)}
                     className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
-                    <EditOrderModal isToggleEdit={isToggleEdit} setIsToggleEdit={setIsToggleEdit} order={order}/>
+                    <EditBlogModal isToggleEdit={isToggleEdit} setIsToggleEdit={setIsToggleEdit} blog={blog}/>
                 </td>
                 <td className=" p-4">
-                <button onClick={()=>handleDelete(order?.id)} className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
+                <button onClick={()=>handleDelete(blog?.id)} className="mr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
                 </td>
             </tr>
         </tbody>
@@ -59,4 +57,4 @@ const OrderItem = ({order,index} : Prop) => {
   )
 }
 
-export default OrderItem
+export default BlogItem

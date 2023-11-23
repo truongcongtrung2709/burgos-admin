@@ -1,7 +1,9 @@
 'use client'
+import { addBlog } from '@/services/blogsAPI';
 import { Blog } from '@/types/blog';
 import { getCurrentDate } from '@/utils/getCurrentDate';
-import React from 'react'
+import Image from 'next/image';
+import React,{useState} from 'react'
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr'
 
@@ -11,10 +13,28 @@ export default function AddBlogView ()  {
     formState:{errors},
     setValue
     }= useForm<Blog>();
-
+    const [imgPreview, setImgPreview] = useState("")
+    const handleChangeImage = (evt:any) =>{
+      const file = evt.target.files[0];
+      if(!file){
+        return;
+      }else{
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = (evt:any) =>{
+          setImgPreview(evt.target.result);
+        }
+      }
+    }
     const onSubmit = (data:Blog) => {
-      console.log(data);
-      
+      try {
+        data.img = imgPreview
+        console.log(data);
+        addBlog(data);
+        alert("Add successfully");
+      } catch (error) {
+        console.log(error);
+      }    
     }
   return(
       <div className="container max-w-screen-xl mx-auto p-4">
@@ -51,12 +71,16 @@ export default function AddBlogView ()  {
           </div>
           <div  className="mb-5">
             <label htmlFor="img" className="block mb-2 text-sm font-medium">Image</label>
-              <input type="file" id="img" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 " placeholder="date & time" {...register("img",{
-                required:{
-                  value:true,
-                  message: "Please add your image"
-                }
-              })}  />
+              <input   type="file" id="img" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 " placeholder="Image" 
+              // {...register("img",{
+              //   required:{
+              //     value:true,
+              //     message: "Please add your image"
+              //   }
+              // })} 
+              onChange = {handleChangeImage}
+              />
+               {imgPreview && <Image width={690} height={383} src={imgPreview} className='max-w-[690px] max-h-[383px] object-cover' alt="preview"/>}
               {errors?.img && <p className="text-red">{errors.img.message}</p>}
           </div>
           <div  className="mb-5">
